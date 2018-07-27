@@ -1,0 +1,3 @@
+class actionConstants extends ConstantsGenerator {
+
+}
