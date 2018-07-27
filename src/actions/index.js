@@ -1,3 +1,4 @@
 export { ACTIONS } from './constants';
 
-export * from './base.actions';
+export * from './app.actions';
+export * from './movie.actions';

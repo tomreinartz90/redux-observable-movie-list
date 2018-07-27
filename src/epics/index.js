@@ -1,6 +1,8 @@
 import { combineEpics } from 'redux-observable';
-import { initApp } from './initApp';
+import { AppEpic } from './App.epic';
+import { MovieListEpic } from './MovieList.epic';
 
 export const rootEpic = combineEpics(
-	initApp
+	...AppEpic.epics,
+	...MovieListEpic.epics
 );
