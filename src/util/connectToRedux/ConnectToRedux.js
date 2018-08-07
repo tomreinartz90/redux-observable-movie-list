@@ -12,7 +12,7 @@ export class ConnectToRedux extends React.Component {
     };
 
     static propTypes = {
-        children: PropTypes.func.isRequired,
+        render: PropTypes.func.isRequired,
         select: PropTypes.func,
         actions: PropTypes.object,
         mountAction: PropTypes.object,
@@ -25,7 +25,6 @@ export class ConnectToRedux extends React.Component {
             throw new Error('Store must be defined via mountStore to let ConnectToRedux work');
         }
 
-        const selectAll = (e) => (e);
         this.unsub = this.observeStore(reduxStore, props.select || this.selectAll, (newState) => this.setState(newState));
     }
 
@@ -48,8 +47,6 @@ export class ConnectToRedux extends React.Component {
         return unsubscribe;
     };
 
-
-
     componentDidMount(){
         const { mountAction } = this.props;
         if(mountAction){
@@ -67,7 +64,7 @@ export class ConnectToRedux extends React.Component {
     }
 
     render() {
-        const {render, actions, select} = this.props;
+        const {render, actions} = this.props;
         return render(this.state, actions);
     }
 }
