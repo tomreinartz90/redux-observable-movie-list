@@ -1,5 +1,6 @@
-import React, {readContext} from "react";
+import React from "react";
 import {Connect} from "react-redux";
+import PropTypes from 'prop-types';
 let reduxStore = null;
 
 export class ConnectToRedux extends React.Component {
@@ -9,6 +10,14 @@ export class ConnectToRedux extends React.Component {
             reduxStore = store;
         }
     };
+
+    static propTypes = {
+        children: PropTypes.func.isRequired,
+        select: PropTypes.func,
+        actions: PropTypes.object,
+        mountAction: PropTypes.object,
+        unMountAction: PropTypes.object,
+    }
 
     constructor(props) {
         super();
@@ -50,11 +59,16 @@ export class ConnectToRedux extends React.Component {
     }
 
     componentWillUnMount(){
+        const { mountAction } = this.props;
+        if(mountAction){
+            reduxStore.dispatch(mountAction());
+        }
+
         this.unsub();
     }
 
     render() {
-        const {children, storeKey, actions, select} = this.props;
+        const {children, actions, select} = this.props;
         return children(this.state, actions);
 
     }

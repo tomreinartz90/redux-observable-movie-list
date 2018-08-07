@@ -10,8 +10,7 @@ export class MovieList extends Component {
 
 	render() {
 		return (
-		<ConnectToRedux mountAction={initMovieList} select={this.selectState} children={(state, actions) => {
-			return (
+		<ConnectToRedux mountAction={initMovieList} select={this.selectState} children={(state, actions) => (
 				<ul>
 					{console.log(state)}
                     {state && state.movies && state.movies.map(movie => {
@@ -19,8 +18,7 @@ export class MovieList extends Component {
                     })}
 
 				</ul>
-            )
-        }}/>
+            )} />
 		);
 	}
 }
