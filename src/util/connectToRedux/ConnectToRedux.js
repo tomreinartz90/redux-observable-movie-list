@@ -17,7 +17,7 @@ export class ConnectToRedux extends React.Component {
         actions: PropTypes.object,
         mountAction: PropTypes.object,
         unMountAction: PropTypes.object,
-    }
+    };
 
     constructor(props) {
         super();
@@ -31,7 +31,6 @@ export class ConnectToRedux extends React.Component {
 
     selectAll(s){
         return s;
-
     }
 
     observeStore = (store, select, onChange) => {
@@ -68,9 +67,8 @@ export class ConnectToRedux extends React.Component {
     }
 
     render() {
-        const {children, actions, select} = this.props;
-        return children(this.state, actions);
-
+        const {render, actions, select} = this.props;
+        return render(this.state, actions);
     }
 }
 
