@@ -1,27 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { initMovieList } from '../../actions';
-import { ConnectedComponent } from '../../util/ConnectedComponent';
+import {ConnectToRedux} from "../../util/connectToRedux/ConnectToRedux";
 
-class MovieList extends ConnectedComponent {
-	componentDidMount() {
-		this.actions.initMovieList();
-	}
+export class MovieList extends Component {
 
-	static stateProps(state) {
+	selectState(state) {
 		return { movies: state.movieList.all };
 	}
 
 	render() {
-		const { movies = [] } = this.props;
 		return (
-			<ul>
-				{movies.map(movie => {
-					return (<li key={movie.id}>{movie.title}</li>);
-				})}
+		<ConnectToRedux mountAction={initMovieList} select={this.selectState} children={(state, actions) => {
+			return (
+				<ul>
+					{console.log(state)}
+                    {state && state.movies && state.movies.map(movie => {
+                        return (<li key={movie.id}>{movie.title}</li>);
+                    })}
 
-			</ul>
+				</ul>
+            )
+        }}/>
 		);
 	}
 }
 
-export default MovieList.connected({ initMovieList });
+export default MovieList;
