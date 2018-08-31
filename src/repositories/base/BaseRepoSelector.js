@@ -16,7 +16,8 @@ export class BaseRepoSelector {
 	 * return all items in the repo
 	 */
 	getAll(state) {
-		return Object.keys(state[this.baseKey].data).map(key => (state[key]));
+		const data = state[this.baseKey].data;
+		return Object.keys(data).map(key => (data[key]));
 	}
 
 	/**

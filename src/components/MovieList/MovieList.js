@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { initMovieList } from '../../actions';
 import { ConnectToRedux } from '../../util/connectToRedux/ConnectToRedux';
-import { movieRepo } from 'src/repositories/movies';
+import { movieRepo } from '../../repositories/movies';
 
 export class MovieList extends Component {
 
@@ -12,7 +11,7 @@ export class MovieList extends Component {
 	render() {
 		return (
 			<ConnectToRedux
-				mountAction={initMovieList} select={this.selectState} render={(state, actions) => (
+				mountAction={movieRepo.actions.initRepo} select={this.selectState} render={(state, actions) => (
 				<ul>
 					{console.log(state)}
 					{state && state.movies && state.movies.map(movie => {

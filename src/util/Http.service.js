@@ -6,7 +6,6 @@ export class HttpService {
 		return ajax.get(`${url}${params.toString()}`)
 							 .pipe(
 								 map(resp => {
-									 console.log(resp);
 									 return resp.response;
 								 })
 							 );

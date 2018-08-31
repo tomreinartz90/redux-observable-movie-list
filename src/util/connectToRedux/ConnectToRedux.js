@@ -1,71 +1,81 @@
-import React from "react";
-import {Connect} from "react-redux";
+import React from 'react';
 import PropTypes from 'prop-types';
+
 let reduxStore = null;
 
 export class ConnectToRedux extends React.Component {
 
-    static mountStore = (store) => {
-        if(!reduxStore){
-            reduxStore = store;
-        }
-    };
+	isReady = false;
 
-    static propTypes = {
-        render: PropTypes.func.isRequired,
-        select: PropTypes.func,
-        actions: PropTypes.object,
-        mountAction: PropTypes.object,
-        unMountAction: PropTypes.object,
-    };
+	static mountStore = (store) => {
+		if (!reduxStore) {
+			reduxStore = store;
+		}
+	};
 
-    constructor(props) {
-        super();
-        if(!reduxStore){
-            throw new Error('Store must be defined via mountStore to let ConnectToRedux work');
-        }
+	static propTypes = {
+		render: PropTypes.func.isRequired,
+		select: PropTypes.func,
+		actions: PropTypes.object,
+		mountAction: PropTypes.func,
+		unMountAction: PropTypes.object,
+	};
 
-        this.unsub = this.observeStore(reduxStore, props.select || this.selectAll, (newState) => this.setState(newState));
-    }
+	constructor(props) {
+		super();
+		if (!reduxStore) {
+			throw new Error('Store must be defined via mountStore to let ConnectToRedux work');
+		}
 
-    selectAll(s){
-        return s;
-    }
+		this.unsub = this.observeStore(reduxStore, props.select || this.selectAll, (newState) => {
+			if (this.isReady) {
+				this.setState(newState);
+			} else {
+				this.state = { ...this.state, ...newState };
+			}
 
-    observeStore = (store, select, onChange) => {
-        let currentState;
-        const handleChange = () => {
-            let nextState = select(store.getState());
-            if (nextState !== currentState) {
-                currentState = nextState;
-                onChange(currentState);
-            }
-        };
+		});
+	}
 
-        let unsubscribe = store.subscribe(handleChange);
-        handleChange();
-        return unsubscribe;
-    };
+	selectAll(s) {
+		return s;
+	}
 
-    componentDidMount(){
-        const { mountAction } = this.props;
-        if(mountAction){
-            reduxStore.dispatch(mountAction());
-        }
-    }
+	observeStore = (store, select, onChange) => {
+		let currentState;
+		const handleChange = () => {
+			let nextState = select(store.getState());
+			if (nextState !== currentState) {
+				currentState = nextState;
+				onChange(currentState);
+			}
+		};
 
-    componentWillUnMount(){
-        const { mountAction } = this.props;
-        if(mountAction){
-            reduxStore.dispatch(mountAction());
-        }
+		let unsubscribe = store.subscribe(handleChange);
+		handleChange();
+		return unsubscribe;
+	};
 
-        this.unsub();
-    }
+	componentDidMount() {
+		const { mountAction } = this.props;
+		this.isReady = true;
+		if (mountAction) {
+			reduxStore.dispatch(mountAction());
+		}
+	}
 
-    render() {
-        const {render, actions} = this.props;
-        return render(this.state, actions);
-    }
+	componentWillUnMount() {
+		const { mountAction } = this.props;
+		if (mountAction) {
+			reduxStore.dispatch(mountAction());
+		}
+
+		this.unsub();
+	}
+
+	render() {
+		const { render, actions } = this.props;
+		return render(this.state, actions);
+	}
 }
 
