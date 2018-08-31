@@ -17,7 +17,6 @@ export class ConnectedComponent extends React.Component {
 		return {};
 	};
 
-
 	static _actionProps = (actions, dispatch) => {
 		const boundActions = Object.keys(actions)
 															 .reduce((result, key) => {
@@ -29,7 +28,7 @@ export class ConnectedComponent extends React.Component {
 
 	static connected(actions) {
 		const actionPropMapper = (dispatch) => {
-			return this._actionProps(actions, dispatch);
+			return ConnectedComponent._actionProps(actions, dispatch);
 		};
 		return connect(this.stateProps, actionPropMapper)(this);
 	}

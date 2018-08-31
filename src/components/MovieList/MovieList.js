@@ -1,27 +1,26 @@
 import React from 'react';
-import { initMovieList } from '../../actions';
+import { movieRepo } from '../../repositories';
 import { ConnectedComponent } from '../../util/ConnectedComponent';
 
 class MovieList extends ConnectedComponent {
 	componentDidMount() {
-		this.actions.initMovieList();
+		this.actions.initRepo();
 	}
 
 	static stateProps(state) {
-		return { movies: state.movieList.all };
+		console.log(state);
+		return { movies: movieRepo.selector.getAll(state) };
 	}
 
 	render() {
 		const { movies = [] } = this.props;
 		return (
 			<ul>
-				{movies.map(movie => {
-					return (<li key={movie.id}>{movie.title}</li>);
-				})}
+				{movies.map(movie => (<li key={movie.id}>{movie.title}</li>))}
 
 			</ul>
 		);
 	}
 }
 
-export default MovieList.connected({ initMovieList });
+export default MovieList.connected({ initRepo: movieRepo.actions.initRepo });
