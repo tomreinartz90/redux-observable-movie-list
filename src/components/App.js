@@ -1,15 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import logo from '../logo.svg';
-import './App.css';
-import { ConnectedComponent } from '../util/ConnectedComponent';
-import { initApp } from '../actions';
-import MovieList from './MovieList/MovieList';
+import logo from "../logo.svg";
+import "./App.css";
+import MovieList from "./MovieList/MovieList";
 
-class App extends ConnectedComponent {
-	componentDidMount() {
-		this.actions.initApp();
-	}
+class App extends React.Component {
 
 	render() {
 		return (
@@ -24,4 +19,4 @@ class App extends ConnectedComponent {
 	}
 }
 
-export default App.connected({ initApp });
+export default App;

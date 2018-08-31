@@ -1,26 +1,29 @@
-import React from 'react';
-import { movieRepo } from '../../repositories';
-import { ConnectedComponent } from '../../util/ConnectedComponent';
+import React, { Component } from 'react';
+import { initMovieList } from '../../actions';
+import { ConnectToRedux } from '../../util/connectToRedux/ConnectToRedux';
+import { movieRepo } from 'src/repositories/movies';
 
-class MovieList extends ConnectedComponent {
-	componentDidMount() {
-		this.actions.initRepo();
-	}
+export class MovieList extends Component {
 
-	static stateProps(state) {
-		console.log(state);
+	selectState(state) {
 		return { movies: movieRepo.selector.getAll(state) };
 	}
 
 	render() {
-		const { movies = [] } = this.props;
 		return (
-			<ul>
-				{movies.map(movie => (<li key={movie.id}>{movie.title}</li>))}
+			<ConnectToRedux
+				mountAction={initMovieList} select={this.selectState} render={(state, actions) => (
+				<ul>
+					{console.log(state)}
+					{state && state.movies && state.movies.map(movie => {
+						return (<li key={movie.id}>{movie.title}</li>);
+					})}
 
-			</ul>
+				</ul>
+			)}
+			/>
 		);
 	}
 }
 
-export default MovieList.connected({ initRepo: movieRepo.actions.initRepo });
+export default MovieList;
